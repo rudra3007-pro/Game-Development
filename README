@@ -1,0 +1,39 @@
+public Rigidbody2D bird;
+    public Transform slingshotPivot;
+
+    private Vector2 startPos;
+    private bool isDragging = false;
+
+    void Start()
+    {
+        startPos = bird.position;
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+            isDragging = true;
+
+        if (Input.GetMouseButtonUp(0) && isDragging)
+        {
+            isDragging = false;
+            LaunchBird();
+        }
+
+        if (isDragging)
+         DragBird();
+    }
+
+    void DragBird()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        bird.position = mousePos;
+    }
+
+    void LaunchBird()
+    {
+        Vector2 launchVelocity = (startPos - bird.position) * 5;
+        bird.isKinematic = false;
+        bird.AddForce(launchVelocity, ForceMode2D.Impulse);
+    }
